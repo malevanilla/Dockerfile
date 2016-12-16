@@ -6,8 +6,6 @@ ENV WEB_DOCUMENT_INDEX index.php
 
 COPY conf/nginx.repo /etc/yum.repos.d/
 
-RUN mkdir /srv/www
-
 RUN yum update -y
 RUN yum install -y nginx
 

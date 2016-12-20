@@ -6,7 +6,7 @@ MAINTAINER Alan Chu "malevanilla@gmail.com"
 RUN yum update -y
 
 #Install base package
-RUN yum install -y git wget autoconf automake libtool re2c flex bison xml2lib-devel openssl-devel bzip2-devel libcurl-devel freetype-devel libjpeg.devel libpng-devel pam-devel libxslt-devel
+RUN yum install -y git wget autoconf automake libtool re2c flex bison xml2lib-devel openssl-devel bzip2-devel libcurl-devel freetype-devel libjpeg-devel libpng-devel pam-devel libxslt-devel
 
 
 #Clear package

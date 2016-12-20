@@ -17,7 +17,7 @@ RUN mkdir /home/src && cd /home/src
 RUN wget ftp://ftp.cac.washington.edu/imap/imap-2007f.tar.gz
 RUN tar -zxf imap-2007f.tar.gz
 RUN cd imap-2007f
-RUN make lr5 PASSWDTYPE=std SSLTYPE=unix.nopwd EXTRACFLAGS=-fPIC IP=4
+RUN make EXTRACFLAGS=-fPIC
 RUN rm -rf /usr/local/imap-2007f/
 RUN mkdir /usr/local/imap-2007f/
 RUN mkdir /usr/local/imap-2007f/include/

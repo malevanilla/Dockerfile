@@ -13,7 +13,7 @@ RUN yum install -y git wget autoconf automake libtool re2c flex bison xml2lib-de
 RUN yum clean all
 
 #Install imap
-mkdir /home/src && cd /home/src
+RUN mkdir /home/src && cd /home/src
 RUN wget ftp://ftp.cac.washington.edu/imap/imap-2007f.tar.gz
 RUN tar -zxf imap-2007f.tar.gz
 RUN cd imap-2007f
@@ -75,6 +75,7 @@ RUN ./configure \
 		--with-xmlrpc \
 		--with-xsl \
 RUN make && make install
+RUN rm -rf /home/src/php-src
 
 #Modify .conf|.ini file
 #RUN sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php.ini && \

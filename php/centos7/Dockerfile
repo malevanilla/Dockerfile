@@ -16,7 +16,7 @@ RUN yum clean all
 RUN mkdir /home/src && cd /home/src
 RUN wget ftp://ftp.cac.washington.edu/imap/imap-2007f.tar.gz
 RUN tar -zxf imap-2007f.tar.gz
-RUN cd imap-2007f
+WORKDIR "imap-2007f"
 RUN make EXTRACFLAGS=-fPIC
 RUN rm -rf /usr/local/imap-2007f/
 RUN mkdir /usr/local/imap-2007f/
@@ -28,7 +28,7 @@ RUN cp c-client/c-client.a /usr/local/imap-2007f/lib/libc-client.a
 RUN rm -rf /home/src/imap-2007f
 
 #Git PHP
-cd /home/src
+WORKDIR "/home/src"
 RUN git clone -b PHP-7.1.0 https://github.com/php/php-src.git
 RUN cd php-src
 

@@ -6,35 +6,33 @@ MAINTAINER Alan Chu "malevanilla@gmail.com"
 RUN yum update -y
 
 #Install base package
-RUN yum install -y git wget make gcc autoconf automake libtool re2c flex bison xml2lib-devel openssl-devel bzip2-devel libcurl-devel freetype-devel libjpeg-devel libpng-devel pam-devel libxslt-devel
+RUN yum install -y git wget make gcc autoconf automake libtool re2c flex bison xml2lib-devel openssl-devel bzip2-devel libcurl-devel freetype-devel libjpeg-devel libpng-devel libxslt-devel pam-devel
 
 
 #Clear package
 RUN yum clean all
 
 #Install imap
-RUN mkdir /home/src && cd /home/src
-RUN wget ftp://ftp.cac.washington.edu/imap/imap-2007f.tar.gz
-RUN tar -zxf imap-2007f.tar.gz
-WORKDIR "imap-2007f"
-RUN make lr5 EXTRACFLAGS=-fPIC IP6=4
-RUN rm -rf /usr/local/imap-2007f/
-RUN mkdir /usr/local/imap-2007f/
-RUN mkdir /usr/local/imap-2007f/include/
-RUN mkdir /usr/local/imap-2007f/lib/
-RUN cp c-client/*.h /usr/local/imap-2007f/include/
-RUN cp c-client/*.c /usr/local/imap-2007f/lib/
-RUN cp c-client/c-client.a /usr/local/imap-2007f/lib/libc-client.a
-RUN rm -rf /home/src/imap-2007f
+RUN mkdir /home/src \
+    && cd /home/src \
+    && wget ftp://ftp.cac.washington.edu/imap/imap-2007f.tar.gz \
+    && tar -zxf imap-2007f.tar.gz \
+    && cd imap-2007f \
+    && make lr5 PASSWDTYPE=std SSLTYPE=unix.nopwd EXTRACFLAGS=-fPIC IP6=4 \
+    && rm -rf /usr/local/imap-2007f \
+    && mkdir /usr/local/imap-2007f \
+    && mkdir /usr/local/imap-2007f/include \
+    && mkdir /usr/local/imap-2007f/lib \
+    && cp c-client/*.h /usr/local/imap-2007f/include/ \
+    && cp c-client/*.c /usr/local/imap-2007f/lib/ \
+    && cp c-client/c-client.a /usr/local/imap-2007f/lib/libc-client.a \
+    && rm -rf /home/src/imap-2007f
 
 #Git PHP
 WORKDIR "/home/src"
-RUN git clone -b PHP-7.1.0 https://github.com/php/php-src.git && cd php-src
-#RUN cd php-src
-
-#make install
-RUN ./buildconf
-RUN ./configure \
+RUN git clone -b PHP-7.1.0 https://github.com/php/php-src.git && cd php-src \
+    && ./buildconf --force \
+    && ./configure \
 		--prefix=/usr/local/php7 \
 		--with-config-file-path=/usr/local/php7/etc \
 		--enable-mbstring \
@@ -66,16 +64,15 @@ RUN ./configure \
 		--with-mysqli \
 		--enable-gd-native-ttf \
 		--with-openssl \
-		--with-libdir=/lib/x86_64-linux-gnu \
 		--enable-ftp \
-		--with-imap \
+		--with-imap=/usr/local/imap-2007f \
 		--with-imap-ssl \
 		--with-kerberos \
 		--with-gettext \
 		--with-xmlrpc \
 		--with-xsl \
-RUN make && make install
-RUN rm -rf /home/src/php-src
+		&& make && make install \
+		&& rm -rf /home/src/php-src
 
 #Modify .conf|.ini file
 #RUN sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php.ini && \
